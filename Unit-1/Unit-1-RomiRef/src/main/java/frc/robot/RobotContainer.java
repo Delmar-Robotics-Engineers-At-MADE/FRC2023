@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.TankDrive;
 // import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
 import frc.robot.subsystems.Drivetrain;
@@ -92,6 +93,12 @@ public class RobotContainer {
    */
   public Command getArcadeDriveCommand() {
     return new ArcadeDrive(
-        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(2));
+        m_drivetrain, () -> m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(2));
   }
+
+  public Command getTankDriveCommand() {
+     return new TankDrive( 
+       m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(3)
+       );
+   }
 }

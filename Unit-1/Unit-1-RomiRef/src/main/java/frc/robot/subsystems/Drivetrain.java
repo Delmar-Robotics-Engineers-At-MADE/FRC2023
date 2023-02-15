@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 // import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import frc.robot.sensors.RomiGyro;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+//import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -17,8 +19,10 @@ public class Drivetrain extends SubsystemBase {
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
-  private final Spark m_leftMotor = new Spark(0);
-  private final Spark m_rightMotor = new Spark(1);
+
+  private final MotorController m_leftMotor = new Talon(0);
+  private final MotorController m_rightMotor = new Talon(1);
+
 
   // The Romi has onboard encoders that are hardcoded
   // to use DIO pins 4/5 and 6/7 for the left and right
@@ -49,6 +53,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+  }
+
+  
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    m_diffDrive.tankDrive(-leftSpeed, -rightSpeed );
   }
 
   // public void resetEncoders() {

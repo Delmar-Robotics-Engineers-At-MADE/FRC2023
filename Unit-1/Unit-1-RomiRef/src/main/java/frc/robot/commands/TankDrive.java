@@ -8,7 +8,7 @@ import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.Supplier;
 
-public class ArcadeDrive extends CommandBase {
+public class TankDrive extends CommandBase {
   private final Drivetrain m_drivetrain;
   private final Supplier<Double> m_xaxisSpeedSupplier;
   private final Supplier<Double> m_zaxisRotateSupplier;
@@ -21,7 +21,7 @@ public class ArcadeDrive extends CommandBase {
    * @param xaxisSpeedSupplier Lambda supplier of forward/backward speed
    * @param zaxisRotateSupplier Lambda supplier of rotational speed
    */
-  public ArcadeDrive(
+  public TankDrive(
       Drivetrain drivetrain,
       Supplier<Double> xaxisSpeedSupplier,
       Supplier<Double> zaxisRotateSupplier) {
@@ -41,7 +41,7 @@ public class ArcadeDrive extends CommandBase {
     System.out.println("xaxisSpeedSupplier " + m_xaxisSpeedSupplier.get() + 
     "zaxisRotateSupplier " + m_zaxisRotateSupplier.get() );
 
-    m_drivetrain.arcadeDrive(m_xaxisSpeedSupplier.get(), m_zaxisRotateSupplier.get());
+    m_drivetrain.tankDrive ( m_zaxisRotateSupplier.get() , m_xaxisSpeedSupplier.get());
   }
 
   // Called once the command ends or is interrupted.
