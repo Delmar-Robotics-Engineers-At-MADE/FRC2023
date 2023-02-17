@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutonomousForwardTime;
 import frc.robot.commands.TankDrive;
 // import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
@@ -72,8 +73,9 @@ public class RobotContainer {
         .onFalse(new PrintCommand("Button A Released"));
 
     // Setup SmartDashboard options
-    // m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
+    //m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousTime(m_drivetrain));
     m_chooser.setDefaultOption("Auto Routine Time", new AutonomousTime(m_drivetrain));
+    m_chooser.addOption("Auto Drive Forward", new AutonomousForwardTime(m_drivetrain));
     SmartDashboard.putData(m_chooser);
   }
 

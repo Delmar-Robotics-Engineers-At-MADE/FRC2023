@@ -38,8 +38,8 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("xaxisSpeedSupplier " + m_xaxisSpeedSupplier.get() + 
-    "zaxisRotateSupplier " + m_zaxisRotateSupplier.get() );
+   // System.out.println("xaxisSpeedSupplier " + m_xaxisSpeedSupplier.get() + 
+   //"zaxisRotateSupplier " + m_zaxisRotateSupplier.get() );
 
     m_drivetrain.arcadeDrive(m_xaxisSpeedSupplier.get(), m_zaxisRotateSupplier.get());
   }

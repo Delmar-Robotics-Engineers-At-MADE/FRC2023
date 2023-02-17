@@ -38,8 +38,8 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("xaxisSpeedSupplier " + m_xaxisSpeedSupplier.get() + 
-    "zaxisRotateSupplier " + m_zaxisRotateSupplier.get() );
+    //System.out.println("xaxisSpeedSupplier " + m_xaxisSpeedSupplier.get() + 
+    //"zaxisRotateSupplier " + m_zaxisRotateSupplier.get() );
 
     m_drivetrain.tankDrive ( m_zaxisRotateSupplier.get() , m_xaxisSpeedSupplier.get());
   }
