@@ -20,8 +20,8 @@ public class DriveDistance extends CommandBase {
    * @param inches The number of inches the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveDistance(double speed, double inches, Drivetrain drive) {
-    m_distance = inches;
+  public DriveDistance(double speed, double feet, Drivetrain drive) {
+    m_distance = feet;
     m_speed = speed;
     m_drive = drive;
     addRequirements(drive);
@@ -50,6 +50,9 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     // Compare distance travelled from start to desired distance
+    System.out.println("average distance: " + m_drive.getAverageDistanceInch()
+    + " average left: " + m_drive.getLeftDistanceInch()
+    + " average right: " + m_drive.getRightDistanceInch());
     return Math.abs(m_drive.getAverageDistanceInch()) >= m_distance;
   }
 }

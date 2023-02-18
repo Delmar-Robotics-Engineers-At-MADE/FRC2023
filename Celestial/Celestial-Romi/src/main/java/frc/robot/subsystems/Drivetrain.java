@@ -21,10 +21,10 @@ public class Drivetrain extends SubsystemBase {
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
-  private final CANSparkMax m_leftFront = new CANSparkMax(1, MotorType.kBrushless);
-  private final CANSparkMax m_leftRear = new CANSparkMax(2, MotorType.kBrushless);
-  private final CANSparkMax m_rightFront = new CANSparkMax(3, MotorType.kBrushless);
-  private final CANSparkMax m_rightRear = new CANSparkMax(4, MotorType.kBrushless);
+  private final CANSparkMax m_leftFront = new CANSparkMax(2, MotorType.kBrushless);
+  private final CANSparkMax m_leftRear = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax m_rightFront = new CANSparkMax(24, MotorType.kBrushless);
+  private final CANSparkMax m_rightRear = new CANSparkMax(13, MotorType.kBrushless);
 
 
   // The Romi has onboard encoders that are hardcoded
@@ -48,12 +48,12 @@ public class Drivetrain extends SubsystemBase {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    m_rightFront.setInverted(true);
-    m_rightRear.setInverted(true);
+    //m_rightFront.setInverted(true);
+    //m_rightRear.setInverted(true);
 
     // Use inches as unit for encoder distances
-    m_leftFrontEncoder.setPositionConversionFactor((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
-    m_rightFrontEncoder.setPositionConversionFactor((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
+    m_leftFrontEncoder.setPositionConversionFactor((Math.PI * kWheelDiameterInch) / kCountsPerRevolution * 12);
+    m_rightFrontEncoder.setPositionConversionFactor((Math.PI * kWheelDiameterInch) / kCountsPerRevolution * 12);
     resetEncoders();
   }
 
