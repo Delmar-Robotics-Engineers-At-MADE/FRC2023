@@ -4,27 +4,37 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+//import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.DriveConstants;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SPI;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private final CANSparkMax m_leftFront = new CANSparkMax(2, MotorType.kBrushless);
+  private final CANSparkMax m_leftRear = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax m_rightFront = new CANSparkMax(24, MotorType.kBrushless);
+  private final CANSparkMax m_rightRear = new CANSparkMax(13, MotorType.kBrushless);
+
   // The motors on the left side of the drive.
   private final MotorControllerGroup m_leftMotors =
-      new MotorControllerGroup(
-          new PWMSparkMax(DriveConstants.kLeftMotor1Port),
-          new PWMSparkMax(DriveConstants.kLeftMotor2Port));
+      new MotorControllerGroup(m_leftFront, m_leftRear);
+          // new CANSparkMax(DriveConstants.kLeftMotor1Port,MotorType.kBrushless),
+          // new CANSparkMax(DriveConstants.kLeftMotor2Port,MotorType.kBrushless)
+          // );
 
   // The motors on the right side of the drive.
   private final MotorControllerGroup m_rightMotors =
-      new MotorControllerGroup(
-          new PWMSparkMax(DriveConstants.kRightMotor1Port),
-          new PWMSparkMax(DriveConstants.kRightMotor2Port));
+      new MotorControllerGroup(m_rightFront, m_rightRear);
+          // new CANSparkMax(DriveConstants.kRightMotor1Port,MotorType.kBrushless),
+          // new CANSparkMax(DriveConstants.kRightMotor2Port,MotorType.kBrushless)
+          // );
 
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
@@ -44,8 +54,9 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRightEncoderReversed);
 
   // The gyro sensor
-  private final Gyro m_gyro = new ADXRS450_Gyro();
-
+  //private final Gyro m_gyro = new ADXRS450_Gyro();
+  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
+  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // We need to invert one side of the drivetrain so that positive voltages
