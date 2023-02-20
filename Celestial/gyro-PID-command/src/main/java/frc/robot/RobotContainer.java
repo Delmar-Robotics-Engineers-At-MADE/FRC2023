@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TurnToAngle;
@@ -52,6 +51,10 @@ public class RobotContainer {
             m_robotDrive));
   }
 
+  public void zeroHeading() {
+    m_robotDrive.zeroHeading();
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
@@ -61,8 +64,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController,Button.kRightBumper.value)
-        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
-        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kSlowSpeedFactor)))
+        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kNormalSpeedFactor)));
 
     // Stabilize robot to drive straight with gyro when left bumper is held
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
@@ -87,7 +90,7 @@ public class RobotContainer {
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
+       .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
   }
 
   /**

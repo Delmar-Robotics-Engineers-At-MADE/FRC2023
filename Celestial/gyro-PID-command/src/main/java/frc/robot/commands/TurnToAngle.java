@@ -8,9 +8,15 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /** A command that will turn the robot to the specified angle. */
 public class TurnToAngle extends PIDCommand {
+
+  private static PIDController m_PID = new PIDController(
+    DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD);
+
   /**
    * Turns to robot to the specified angle.
    *
@@ -19,7 +25,7 @@ public class TurnToAngle extends PIDCommand {
    */
   public TurnToAngle(double targetAngleDegrees, DriveSubsystem drive) {
     super(
-        new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD),
+        m_PID,
         // Close loop on heading
         drive::getHeading,
         // Set reference to target
@@ -35,11 +41,19 @@ public class TurnToAngle extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+
+    // Add the PID to dashboard
+    ShuffleboardTab turnTab = Shuffleboard.getTab("Turn Command");
+    turnTab.add("PID", m_PID);
   }
 
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
+    // System.out.println(getController().getPositionError());
+    // boolean result = Math.abs(getController().getPositionError()) 
+    //   <= DriveConstants.kTurnToleranceDeg;
+    // return result;
     return getController().atSetpoint();
   }
 }
