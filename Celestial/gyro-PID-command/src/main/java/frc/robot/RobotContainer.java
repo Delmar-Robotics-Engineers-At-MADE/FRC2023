@@ -14,6 +14,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -29,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final HoodSubsystem m_hood = new HoodSubsystem();
+
 
   // The driver's controller
   //PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
@@ -49,6 +52,12 @@ public class RobotContainer {
                 m_robotDrive.arcadeDrive(
                     -m_driverController.getLeftY(), -m_driverController.getRightX()),
             m_robotDrive));
+
+    m_hood.setDefaultCommand(new RunCommand (
+      () -> m_hood.elevate(m_driverController.getLeftTriggerAxis(),
+                           m_driverController.getRightTriggerAxis() ),
+      m_hood
+      ));
   }
 
   public void zeroHeading() {
