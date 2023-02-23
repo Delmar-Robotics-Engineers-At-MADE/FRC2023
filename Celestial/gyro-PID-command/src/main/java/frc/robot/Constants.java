@@ -53,4 +53,9 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static final class HoodConstants {
+    public static final int kHoodEncoderLimitLow = -20;
+    public static final int kHoodEncoderLimitHigh = -200;
+  }
 }

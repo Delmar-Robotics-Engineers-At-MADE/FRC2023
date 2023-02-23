@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.Encoder;
+
+import frc.robot.Constants.HoodConstants;
+
 // import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class HoodSubsystem extends SubsystemBase {
@@ -29,21 +32,40 @@ public class HoodSubsystem extends SubsystemBase {
         m_driveBaseTab = Shuffleboard.getTab("Hood");
         m_driveBaseTab.add("Limit Switch", m_limitSwitch);
         m_driveBaseTab.add("Encoder", m_encoder);
-        m_driveBaseTab.add("Encoder Homed", m_encoderHomed);
+        m_driveBaseTab.addBoolean("Homed", () -> m_encoderHomed);
+        // put homed widget on main dashboard tab, because not sure how to put it on tab using putBoolean
+        // SmartDashboard.putBoolean("Encoder Homed", m_encoderHomed);
     }
 
-    public void elevate(double upSpeed, double downSpeed) {
+    public void elevateWithGamepad(double upSpeed, double downSpeed) {
         if (upSpeed > 0.0) {
-            m_elevatorMotor.set(-upSpeed);
-        } else if (m_limitSwitch.get()) {
-            m_elevatorMotor.set(downSpeed);
-        } else if (!m_limitSwitch.get()) { // on limit switch
-            m_elevatorMotor.set(0.0);
-            m_encoder.reset();
-            m_encoderHomed = true;
-            SmartDashboard.putBoolean("Encoder Homed", m_encoderHomed);
+            elevate(-upSpeed);
         } else {
-            m_elevatorMotor.set(0.0);
+            elevate (downSpeed);
         }
     }
+
+    public void elevate(double speed) {
+        // encoder goes negative as hood goes up
+        if (m_encoderHomed && speed > 0 && m_encoder.getDistance() > HoodConstants.kHoodEncoderLimitLow) {
+            // if homed, and we are close to limit switch, don't allow down
+            m_elevatorMotor.set(0.0);
+        } else if (m_encoderHomed && speed < 0 && m_encoder.getDistance() < HoodConstants.kHoodEncoderLimitHigh) {
+            // if homed, don't allow hood to go up forever
+            m_elevatorMotor.set(0.0);
+        } else if (m_limitSwitch.get()) { // hood is NOT on limit switch; ok to go either way
+            m_elevatorMotor.set(speed);
+        } else { // on limit switch; up is ok, but not down
+            m_encoder.reset();
+            m_encoderHomed = true;
+            // SmartDashboard.putBoolean("Encoder Homed", m_encoderHomed);
+            if (speed < 0) { // up is ok
+                m_elevatorMotor.set(speed);
+            } else { // down not ok
+                m_elevatorMotor.set(0.0);
+            }
+        }
+    }
+
+
 }

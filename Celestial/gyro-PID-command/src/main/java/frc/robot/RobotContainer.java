@@ -54,7 +54,7 @@ public class RobotContainer {
             m_robotDrive));
 
     m_hood.setDefaultCommand(new RunCommand (
-      () -> m_hood.elevate(m_driverController.getLeftTriggerAxis(),
+      () -> m_hood.elevateWithGamepad(m_driverController.getLeftTriggerAxis(),
                            m_driverController.getRightTriggerAxis() ),
       m_hood
       ));
