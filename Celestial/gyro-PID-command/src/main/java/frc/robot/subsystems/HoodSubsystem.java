@@ -37,6 +37,10 @@ public class HoodSubsystem extends SubsystemBase {
         // SmartDashboard.putBoolean("Encoder Homed", m_encoderHomed);
     }
 
+    public double encoderPosition() {
+        return m_encoder.getDistance();
+    }
+
     public void elevateWithGamepad(double upSpeed, double downSpeed) {
         if (upSpeed > 0.0) {
             elevate(-upSpeed);
@@ -52,6 +56,9 @@ public class HoodSubsystem extends SubsystemBase {
             m_elevatorMotor.set(0.0);
         } else if (m_encoderHomed && speed < 0 && m_encoder.getDistance() < HoodConstants.kHoodEncoderLimitHigh) {
             // if homed, don't allow hood to go up forever
+            m_elevatorMotor.set(0.0);
+        } else if (!m_encoderHomed && speed < 0) { 
+            // not homed; don't allow up at all; operator should home first thing
             m_elevatorMotor.set(0.0);
         } else if (m_limitSwitch.get()) { // hood is NOT on limit switch; ok to go either way
             m_elevatorMotor.set(speed);
