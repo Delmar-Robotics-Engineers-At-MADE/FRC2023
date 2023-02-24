@@ -6,49 +6,51 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /** A command that will turn the robot to the specified angle. */
-public class TurnToAngle extends PIDCommand {
+public class RaiseHood extends PIDCommand {
 
   private static PIDController m_PID = new PIDController(
-    DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD);
+    HoodConstants.kHoodP,  HoodConstants.kHoodI,HoodConstants.kHoodD);
 
   private static boolean m_shuffleboardLoaded = false;
-  
+
   /**
-   * Turns to robot to the specified angle.
+   * Raises hood to a specified distance.
    *
-   * @param targetAngleDegrees The angle to turn to
-   * @param drive The drive subsystem to use
+   * @param targetDistance The encoder distance to go to
+   * @param hood The subsystem to use
    */
-  public TurnToAngle(double targetAngleDegrees, DriveSubsystem drive) {
+  public RaiseHood(double targetDistance, HoodSubsystem hood) {
     super(
         m_PID,
-        // Close loop on heading
-        drive::getHeading,
-        // Set reference to target
-        targetAngleDegrees,
-        // Pipe output to turn robot
-        output -> drive.arcadeDrive(0, output),
-        // Require the drive
-        drive);
+        // Close loop on hood position
+        hood::encoderPosition,
+        // Set reference to target distance
+        targetDistance,
+        // Pipe output to hood to elevate
+        output -> hood.elevate(output),
+        // Require the hood subsystem
+        hood);
 
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
+    //getController().enableContinuousInput(-180, 180);
+    
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
-    getController()
-        .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
-
+      getController().setTolerance(HoodConstants.kDistanceTolerance);
+      
     // Add the PID to dashboard
     if (!m_shuffleboardLoaded) {
-      ShuffleboardTab turnTab = Shuffleboard.getTab("Drivebase");
-      turnTab.add("Gyro PID", m_PID);
-      m_shuffleboardLoaded = true;  // so we do this only once no matter how many instances are created
+      ShuffleboardTab dashboardTab = Shuffleboard.getTab("Hood");
+      dashboardTab.add("Raiser PID", m_PID);
+      m_shuffleboardLoaded = true; // so we do this only once for the class
     }
   }
 

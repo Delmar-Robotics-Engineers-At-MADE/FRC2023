@@ -57,5 +57,10 @@ public final class Constants {
   public static final class HoodConstants {
     public static final int kHoodEncoderLimitLow = -20;
     public static final int kHoodEncoderLimitHigh = -200;
+    public static final double kHoodP = 0.02;
+    public static final double kHoodI = 0;
+    public static final double kHoodD = 0;
+    public static final double kDistanceTolerance = 1;
+   ;
   }
 }

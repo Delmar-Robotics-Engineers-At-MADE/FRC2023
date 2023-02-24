@@ -19,7 +19,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Min Output",
-              "_title": "Min Output"
+              "_title": "Min Output",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,0": {
@@ -30,7 +32,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Max Output",
-              "_title": "Max Output"
+              "_title": "Max Output",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "2,0": {
@@ -41,7 +45,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Feed Forward",
-              "_title": "Feed Forward"
+              "_title": "Feed Forward",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,0": {
@@ -52,7 +58,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/D Gain",
-              "_title": "D Gain"
+              "_title": "D Gain",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,0": {
@@ -63,7 +71,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/I Zone",
-              "_title": "I Zone"
+              "_title": "I Zone",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "5,0": {
@@ -74,7 +84,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/I Gain",
-              "_title": "I Gain"
+              "_title": "I Gain",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,2": {
@@ -85,7 +97,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Motor Index",
-              "_title": "Motor Index"
+              "_title": "Motor Index",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,0": {
@@ -96,7 +110,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/P Gain",
-              "_title": "P Gain"
+              "_title": "P Gain",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,2": {
@@ -107,7 +123,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Selected Motor",
-              "_title": "Selected Motor"
+              "_title": "Selected Motor",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,1": {
@@ -118,7 +136,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/SetPoint",
-              "_title": "SetPoint"
+              "_title": "SetPoint",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,1": {
@@ -129,7 +149,48 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ProcessVariable",
-              "_title": "ProcessVariable"
+              "_title": "ProcessVariable",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
+              "_title": "limelight_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Stream",
+              "_title": "limelight_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Interface",
+              "_title": "limelight_Interface",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -150,8 +211,8 @@
     }
   ],
   "windowGeometry": {
-    "x": -1626.0,
-    "y": 41.0,
+    "x": 0.0,
+    "y": 131.0,
     "width": 1394.0,
     "height": 721.0
   }

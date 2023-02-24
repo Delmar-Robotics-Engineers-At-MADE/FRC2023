@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.RaiseHood;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -100,6 +101,14 @@ public class RobotContainer {
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kB.value)
        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
+
+    // Raise Hood when the 'Y' button is pressed
+    new JoystickButton(m_driverController, Button.kY.value)
+        .onTrue(new RaiseHood(-150, m_hood));
+
+    // Lower Hood when 'A' button is pressed
+    new JoystickButton(m_driverController, Button.kA.value)
+       .onTrue(new RaiseHood(-25, m_hood));       
   }
 
   /**

@@ -62,7 +62,7 @@ public class HoodSubsystem extends SubsystemBase {
             m_elevatorMotor.set(0.0);
         } else if (m_limitSwitch.get()) { // hood is NOT on limit switch; ok to go either way
             m_elevatorMotor.set(speed);
-        } else { // on limit switch; up is ok, but not down
+        } else if (!m_limitSwitch.get()){ // on limit switch; up is ok, but not down
             m_encoder.reset();
             m_encoderHomed = true;
             // SmartDashboard.putBoolean("Encoder Homed", m_encoderHomed);
