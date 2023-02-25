@@ -17,6 +17,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 //import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 
@@ -61,6 +63,12 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   //private final Gyro m_gyro = new ADXRS450_Gyro();
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
+
+private PhotonCamera m_photonCamera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+private PhotonPipelineResult m_latestPhotonResult;
+private double m_bestAprilTagYaw = 0.0;
+private int m_bestAprilTagID = 0;
+
   
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -93,7 +101,8 @@ public class DriveSubsystem extends SubsystemBase {
     //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     // encoders.add("Left Encoder", m_leftEncoder);
     // encoders.add("Right Encoder", m_rightEncoder);
-
+    driveBaseTab.addDouble("Tag Yaw", () -> m_bestAprilTagYaw);
+    driveBaseTab.addDouble("Tag ID", () -> m_bestAprilTagID);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
   }
 
@@ -171,4 +180,28 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+    // call this from PID command to turn robot to best target
+    public double getBestAprilTagYaw() {
+      updateBestAprilTag();
+      return m_bestAprilTagYaw;
+    }
+  
+    public void updateBestAprilTag() {
+      m_latestPhotonResult = m_photonCamera.getLatestResult();
+      if (m_latestPhotonResult.hasTargets()) {
+        m_bestAprilTagYaw = m_latestPhotonResult.getBestTarget().getYaw();
+        m_bestAprilTagID = m_latestPhotonResult.getBestTarget().getFiducialId();
+      } else {
+        m_bestAprilTagYaw = 0.0;
+        m_bestAprilTagID = 0;
+      }
+      
+    }
 }
+
+
+
+
+
+

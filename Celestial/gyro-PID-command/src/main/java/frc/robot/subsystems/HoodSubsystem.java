@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -17,6 +19,9 @@ import frc.robot.Constants.HoodConstants;
 public class HoodSubsystem extends SubsystemBase {
 
     private final DigitalInput m_limitSwitch = new DigitalInput(4);
+
+    // private final AnalogInput m_potentiometer = new AnalogInput(0);
+    private final AnalogPotentiometer m_potentiometer = new AnalogPotentiometer(0);
 
     private final WPI_TalonSRX m_elevatorMotor = new WPI_TalonSRX(11);
 
@@ -31,6 +36,8 @@ public class HoodSubsystem extends SubsystemBase {
         m_elevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_driveBaseTab = Shuffleboard.getTab("Hood");
         m_driveBaseTab.add("Limit Switch", m_limitSwitch);
+        m_driveBaseTab.add("Potentiometer2", m_potentiometer);
+        m_driveBaseTab.addDouble("Pot2", () -> m_potentiometer.get());
         m_driveBaseTab.add("Encoder", m_encoder);
         m_driveBaseTab.addBoolean("Homed", () -> m_encoderHomed);
         // put homed widget on main dashboard tab, because not sure how to put it on tab using putBoolean
@@ -39,6 +46,10 @@ public class HoodSubsystem extends SubsystemBase {
 
     public double encoderPosition() {
         return m_encoder.getDistance();
+    }
+
+    public double potPosition() {
+        return m_potentiometer.get();
     }
 
     public void elevateWithGamepad(double upSpeed, double downSpeed) {

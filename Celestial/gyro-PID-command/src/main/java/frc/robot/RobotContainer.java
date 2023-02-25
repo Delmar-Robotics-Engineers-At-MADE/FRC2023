@@ -15,12 +15,15 @@ import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.commands.UpdateBestAprilTag;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RaiseHood;
+import frc.robot.commands.RaiseWithPotentiometer;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -103,12 +106,19 @@ public class RobotContainer {
        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
 
     // Raise Hood when the 'Y' button is pressed
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //     .onTrue(new RaiseHood(-150, m_hood));
     new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new RaiseHood(-150, m_hood));
+        .onTrue(new RaiseWithPotentiometer(0.045, m_hood));
 
     // Lower Hood when 'A' button is pressed
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //    .onTrue(new RaiseHood(-25, m_hood));       
     new JoystickButton(m_driverController, Button.kA.value)
-       .onTrue(new RaiseHood(-25, m_hood));       
+       .onTrue(new RaiseWithPotentiometer(.041, m_hood));       
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+      .whileTrue(new RepeatCommand(new UpdateBestAprilTag(m_robotDrive)));
   }
 
   /**
