@@ -104,6 +104,9 @@ private int m_bestAprilTagID = 0;
     driveBaseTab.addDouble("Tag Yaw", () -> m_bestAprilTagYaw);
     driveBaseTab.addDouble("Tag ID", () -> m_bestAprilTagID);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
+
+    // setup photon vision
+    
   }
 
   /**

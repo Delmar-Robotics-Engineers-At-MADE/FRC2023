@@ -13,6 +13,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.TurnToAprilTag;
+import frc.robot.commands.TurnToAprilTagProfiled;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.commands.UpdateBestAprilTag;
@@ -99,7 +101,7 @@ public class RobotContainer {
 
     // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(5));
+        .whileTrue(new RepeatCommand( new TurnToAprilTagProfiled(0, m_robotDrive).withTimeout(5)));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kB.value)
