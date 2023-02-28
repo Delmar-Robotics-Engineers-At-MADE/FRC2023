@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DriveToAprilTagProfiled;
 import frc.robot.commands.RaiseHood;
 import frc.robot.commands.RaiseWithPotentiometer;
 
@@ -105,7 +106,7 @@ public class RobotContainer {
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kB.value)
-       .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
+    .whileTrue(new RepeatCommand( new DriveToAprilTagProfiled(5, m_robotDrive).withTimeout(5)));
 
     // Raise Hood when the 'Y' button is pressed
     // new JoystickButton(m_driverController, Button.kY.value)

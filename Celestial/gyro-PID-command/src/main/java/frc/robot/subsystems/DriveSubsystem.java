@@ -6,8 +6,11 @@ package frc.robot.subsystems;
 
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,8 +21,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 //import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -68,6 +73,8 @@ private PhotonCamera m_photonCamera = new PhotonCamera("Microsoft_LifeCam_HD-300
 private PhotonPipelineResult m_latestPhotonResult;
 private double m_bestAprilTagYaw = 0.0;
 private int m_bestAprilTagID = 0;
+private double m_bestAprilTagPitch=0.0;
+private double  m_bestAprilTagDistance = 0.0;
 
   
   /** Creates a new DriveSubsystem. */
@@ -103,6 +110,7 @@ private int m_bestAprilTagID = 0;
     // encoders.add("Right Encoder", m_rightEncoder);
     driveBaseTab.addDouble("Tag Yaw", () -> m_bestAprilTagYaw);
     driveBaseTab.addDouble("Tag ID", () -> m_bestAprilTagID);
+    driveBaseTab.addDouble("Tag Distance", () -> m_bestAprilTagDistance);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
 
     // setup photon vision
@@ -190,14 +198,32 @@ private int m_bestAprilTagID = 0;
       return m_bestAprilTagYaw;
     }
   
+    public double getBestAprilTagPitch() {
+      updateBestAprilTag();
+      return m_bestAprilTagPitch;
+    }
+
+    public double getBestAprilTagDistance() {
+      updateBestAprilTag();
+      return m_bestAprilTagDistance;
+    }
+
     public void updateBestAprilTag() {
       m_latestPhotonResult = m_photonCamera.getLatestResult();
       if (m_latestPhotonResult.hasTargets()) {
         m_bestAprilTagYaw = m_latestPhotonResult.getBestTarget().getYaw();
+        m_bestAprilTagPitch = m_latestPhotonResult.getBestTarget().getPitch();
         m_bestAprilTagID = m_latestPhotonResult.getBestTarget().getFiducialId();
+        m_bestAprilTagDistance = PhotonUtils.calculateDistanceToTargetMeters(
+            DriveConstants.CAMERA_HEIGHT_METERS,
+            DriveConstants.TARGET_HEIGHT_METERS,
+            DriveConstants.CAMERA_PITCH_RADIANS,
+            Units.degreesToRadians(m_latestPhotonResult.getBestTarget().getPitch()));
       } else {
         m_bestAprilTagYaw = 0.0;
+        m_bestAprilTagPitch = 0.0;
         m_bestAprilTagID = 0;
+        m_bestAprilTagDistance =0;
       }
       
     }
