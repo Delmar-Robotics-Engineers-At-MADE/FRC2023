@@ -97,6 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
     // driveBaseTab.add("Gyro", m_gyro);
 
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
+
   }
 
   /**
