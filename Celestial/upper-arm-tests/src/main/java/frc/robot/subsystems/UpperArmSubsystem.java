@@ -85,12 +85,4 @@ public class UpperArmSubsystem extends SubsystemBase {
         return m_upperArmMotor.getSelectedSensorPosition();
     }
 
-    public boolean isFalconAtSetpoint() {
-        boolean result =  Math.abs(m_upperArmMotor.getClosedLoopError() 
-                        - Constants.UpperArmConstants.kFalconClosedLoopTolerance)
-               <= Constants.UpperArmConstants.kFalconClosedLoopTolerance;
-        // System.out.println("Falcon at setpoint: " + result);
-        return result;
-    }
-
 }

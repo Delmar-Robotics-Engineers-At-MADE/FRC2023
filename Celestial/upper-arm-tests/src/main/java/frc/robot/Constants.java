@@ -104,8 +104,8 @@ public final class Constants {
 
     // for testing only
     public static final double kFalconClosedLoopTolerance = 100;
-    public static final double kFalconTestNudgeAmount = 500;
-    public static final double kFalconP = 1;
+    public static final double kFalconTestNudgeAmount = 2000;
+    public static final double kFalconP = 0.1;
 
   }
 }
