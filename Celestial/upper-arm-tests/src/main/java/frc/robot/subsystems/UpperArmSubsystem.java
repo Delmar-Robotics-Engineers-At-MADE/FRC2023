@@ -44,6 +44,10 @@ public class UpperArmSubsystem extends SubsystemBase {
         err = m_upperArmMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
         err = m_upperArmMotor.setSelectedSensorPosition(0.0) ; if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
 
+        // note whether already homed
+        checkEncoderHomed();
+
+
         m_armTab = Shuffleboard.getTab("Arm");
         m_armTab.addDouble("Shoulder Pot", () -> m_potmeter.get());
         m_armTab.add("Shoulder Enc", m_encoder);
@@ -72,13 +76,29 @@ public class UpperArmSubsystem extends SubsystemBase {
         m_encoder.reset();
     }
 
-    public void nudgeClosedLoopByFalconEnc () {
-        double targetEncCounts = m_nudgeDashboardEntry.getDouble(0);
-        double kP = m_falconPEntry.getDouble(0);
-        ErrorCode err = m_upperArmMotor.config_kP(0, kP, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
-        double currentPosition = m_upperArmMotor.getSelectedSensorPosition();
-        System.out.println("setting target enc position to " + currentPosition + " + " + targetEncCounts);
-        m_upperArmMotor.set(ControlMode.Position, currentPosition + targetEncCounts);
+    private void checkEncoderHomed() {
+        if ( Math.abs(potPosition() - Constants.UpperArmConstants.kHomePotmeterValue) 
+                < Constants.UpperArmConstants.kPotmeterTolerance) {
+            setEncoderHomed();
+            }
+    }
+
+    public void nudgeClosedLoopByFalconEnc (boolean up) {
+        double nudgeAmount = m_nudgeDashboardEntry.getDouble(0);
+        checkEncoderHomed();
+        if (!up) { // going down
+            nudgeAmount = -nudgeAmount;
+        }
+        if (!up && m_encoderHomed && m_encoder.get() > 0) {
+            // don't go down below home
+            m_upperArmMotor.set(ControlMode.PercentOutput, 0.0);
+        } else {
+            double kP = m_falconPEntry.getDouble(0);
+            ErrorCode err = m_upperArmMotor.config_kP(0, kP, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
+            double currentPosition = m_upperArmMotor.getSelectedSensorPosition();
+            System.out.println("setting target enc position to " + currentPosition + " + " + nudgeAmount);
+            m_upperArmMotor.set(ControlMode.Position, currentPosition + nudgeAmount);
+        }
     }
 
     public double getFalconEncPosition () {

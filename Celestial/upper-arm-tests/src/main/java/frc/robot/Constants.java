@@ -85,7 +85,7 @@ public final class Constants {
 
   public static final class UpperArmConstants {
 
-    public static final int UPPER_ARM_MOTOR_ID = 5;
+    public static final int UPPER_ARM_MOTOR_ID = 0;
 
     public static final int kRevEncoderLimitLow = -20;
     public static final int kRevEncoderLimitHigh = -200;
@@ -94,8 +94,8 @@ public final class Constants {
     public static final double kRevEncoderD = 0;
     public static final double kRevEncoderTolerance = 1;  
 
-    public static final double kPotmeterP = 250;
-    public static final double kPotmeterI = 0;
+    public static final double kPotmeterP = 20;
+    public static final double kPotmeterI = 2;
     public static final double kPotmeterD = 0;
     public static final double kPotmeterTolerance = 0.001;  
 
