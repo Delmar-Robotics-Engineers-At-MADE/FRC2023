@@ -21,7 +21,7 @@ public class UpperArmSubsystem extends SubsystemBase {
     private final WPI_TalonFX m_upperArmMotor = new WPI_TalonFX(UpperArmConstants.UPPER_ARM_MOTOR_ID);
     private final AnalogPotentiometer m_potmeter = new AnalogPotentiometer(0);
     private final Encoder m_encoder = new Encoder(0, 1, 
-                        false, Encoder.EncodingType.k4X);
+                        true, Encoder.EncodingType.k4X);
     public boolean m_encoderHomed = false;
     private ShuffleboardTab m_armTab;
     public GenericEntry m_nudgeDashboardEntry;
@@ -33,20 +33,12 @@ public class UpperArmSubsystem extends SubsystemBase {
 
         // planning to use open-loop control on Falcon, plus our own PID controller using Rev encoder, so don't need PID settings
 
-        // m_upperArmMotor.Config_kF(0, kFtuned, 30); // 2022 shooter Falcons were 30
-        // m_upperArmMotor.Config_kP(0, kPtuned, 30);
-        // m_upperArmMotor.Config_kI(0, 0.0, 30); // was .00005 in 2020
-        // m_upperArmMotor.Config_kD(0, kDtuned, 30); // was 0 in 2020
-        // m_upperArmMotor.ConfigClosedloopRamp(kRampTuned);
-        // m_upperArmMotor.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, 30);
-
         ErrorCode err = m_upperArmMotor.configFactoryDefault(); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
         err = m_upperArmMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
         err = m_upperArmMotor.setSelectedSensorPosition(0.0) ; if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
 
         // note whether already homed
         checkEncoderHomed();
-
 
         m_armTab = Shuffleboard.getTab("Arm");
         m_armTab.addDouble("Shoulder Pot", () -> m_potmeter.get());
@@ -89,10 +81,12 @@ public class UpperArmSubsystem extends SubsystemBase {
         if (!up) { // going down
             nudgeAmount = -nudgeAmount;
         }
-        if (!up && m_encoderHomed && m_encoder.get() > 0) {
+        if (!up && m_encoderHomed && encoderPosition() < 20) {
             // don't go down below home
+            System.out.println("don't go down anymore");
             m_upperArmMotor.set(ControlMode.PercentOutput, 0.0);
         } else {
+            System.out.println("ok to go");
             double kP = m_falconPEntry.getDouble(0);
             ErrorCode err = m_upperArmMotor.config_kP(0, kP, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
             double currentPosition = m_upperArmMotor.getSelectedSensorPosition();
