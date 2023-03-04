@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.HomeUpperArmCommand;
+import frc.robot.commands.MoveUpperArmCommand;
 import frc.robot.subsystems.UpperArmSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,6 +32,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
     .toggleOnTrue(new HomeUpperArmCommand(m_upperArm));
     
-        
+    new JoystickButton(m_driverController, Button.kX.value)
+    .toggleOnTrue(new MoveUpperArmCommand(200, m_upperArm));
+
+    
   }
 }

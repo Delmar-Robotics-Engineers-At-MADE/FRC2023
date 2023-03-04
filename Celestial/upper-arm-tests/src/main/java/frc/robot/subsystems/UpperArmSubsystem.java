@@ -58,7 +58,15 @@ public class UpperArmSubsystem extends SubsystemBase {
         return m_potmeter.get();
     }
 
+    private double clamp (double x, double limitLow, double limitHigh) {
+        double result = Math.max(x, limitLow);
+        result = Math.min(result, limitHigh);
+        return result;
+    }
+
     public void moveOpenLoop (double powerPercent) {
+        powerPercent = clamp (powerPercent, -Constants.UpperArmConstants.kMaxFalconPower, 
+                                             Constants.UpperArmConstants.kMaxFalconPower);
         m_upperArmMotor.set(ControlMode.PercentOutput, powerPercent);
         System.out.println("Falcon power: " + powerPercent);
     }
@@ -83,16 +91,15 @@ public class UpperArmSubsystem extends SubsystemBase {
         }
         if (!up && m_encoderHomed && encoderPosition() < 20) {
             // don't go down below home
-            System.out.println("don't go down anymore");
-            m_upperArmMotor.set(ControlMode.PercentOutput, 0.0);
-        } else {
-            System.out.println("ok to go");
-            double kP = m_falconPEntry.getDouble(0);
-            ErrorCode err = m_upperArmMotor.config_kP(0, kP, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
-            double currentPosition = m_upperArmMotor.getSelectedSensorPosition();
-            System.out.println("setting target enc position to " + currentPosition + " + " + nudgeAmount);
-            m_upperArmMotor.set(ControlMode.Position, currentPosition + nudgeAmount);
+            System.out.println("don't go down anymore !!!!!!!!!!!!");
+            // but allow it, was... m_upperArmMotor.set(ControlMode.PercentOutput, 0.0);
         }
+        System.out.println("ok to go");
+        double kP = m_falconPEntry.getDouble(0);
+        ErrorCode err = m_upperArmMotor.config_kP(0, kP, 30); if (err.value != 0) {System.out.println("Falcon config err: " + err.value);}
+        double currentPosition = m_upperArmMotor.getSelectedSensorPosition();
+        System.out.println("setting target enc position to " + currentPosition + " + " + nudgeAmount);
+        m_upperArmMotor.set(ControlMode.Position, currentPosition + nudgeAmount);
     }
 
     public double getFalconEncPosition () {
