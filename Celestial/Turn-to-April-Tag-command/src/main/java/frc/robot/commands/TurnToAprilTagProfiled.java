@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -29,11 +30,11 @@ public class TurnToAprilTagProfiled extends ProfiledPIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-  public TurnToAprilTagProfiled(double targetAngleDegrees, DriveSubsystem drive) {
+  public TurnToAprilTagProfiled(double targetAngleDegrees, AprilTagSubsystem aprilTags, DriveSubsystem drive) {
     super(
         m_PID,
         // Close loop on heading
-        drive::getBestAprilTagYaw,
+        aprilTags::getBestAprilTagYaw,
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot

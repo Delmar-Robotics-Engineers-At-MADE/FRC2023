@@ -4,17 +4,13 @@
 
 package frc.robot;
 
-//import static edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
-//import edu.wpi.first.wpilibj.PS4Controller;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.TurnToAngleProfiled;
-import frc.robot.commands.TurnToAprilTag;
 import frc.robot.commands.TurnToAprilTagProfiled;
+import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.commands.UpdateBestAprilTag;
@@ -24,20 +20,14 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DriveToAprilTagProfiled;
-import frc.robot.commands.RaiseHood;
+import frc.robot.commands.DriveToAprilTag;
 import frc.robot.commands.RaiseWithPotentiometer;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final HoodSubsystem m_hood = new HoodSubsystem();
+  private final AprilTagSubsystem m_aprilTags = new AprilTagSubsystem();
 
 
   // The driver's controller
@@ -102,11 +92,11 @@ public class RobotContainer {
 
     // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kX.value)
-        .whileTrue(new RepeatCommand( new TurnToAprilTagProfiled(0, m_robotDrive).withTimeout(5)));
+        .whileTrue(new RepeatCommand( new TurnToAprilTagProfiled(0, m_aprilTags, m_robotDrive).withTimeout(5)));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kB.value)
-    .whileTrue(new RepeatCommand( new DriveToAprilTagProfiled(DriveConstants.GOAL_RANGE_METERS, m_robotDrive).withTimeout(5)));
+    .whileTrue(new RepeatCommand( new DriveToAprilTag(DriveConstants.GOAL_RANGE_METERS, m_aprilTags, m_robotDrive).withTimeout(5)));
 
     // Raise Hood when the 'Y' button is pressed
     // new JoystickButton(m_driverController, Button.kY.value)
@@ -121,7 +111,7 @@ public class RobotContainer {
        .onTrue(new RaiseWithPotentiometer(.041, m_hood));       
 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-      .whileTrue(new RepeatCommand(new UpdateBestAprilTag(m_robotDrive)));
+      .whileTrue(new RepeatCommand(new UpdateBestAprilTag(m_aprilTags)));
   }
 
   /**

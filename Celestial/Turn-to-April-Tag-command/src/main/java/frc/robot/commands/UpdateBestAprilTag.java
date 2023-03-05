@@ -5,20 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.AprilTagSubsystem;
 
 /** A command that will turn the robot to the specified angle. */
 public class UpdateBestAprilTag extends CommandBase {
 
-  private DriveSubsystem m_drive;
+  private AprilTagSubsystem m_aprilTags;
 
-  public UpdateBestAprilTag(DriveSubsystem drive) {
-    m_drive = drive;
+  public UpdateBestAprilTag(AprilTagSubsystem aprilTags) {
+    m_aprilTags = aprilTags;
   }
 
   @Override
   public void execute() {
-    m_drive.updateBestAprilTag();
+    m_aprilTags.updateBestAprilTag();
   }
 
   // @Override
