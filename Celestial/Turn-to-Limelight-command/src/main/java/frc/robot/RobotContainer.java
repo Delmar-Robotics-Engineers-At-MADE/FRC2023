@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.commands.TurnToLimelightProfiled;
 import frc.robot.commands.UpdateBestLimelightCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final LimelightSubsystem m_limelight = new LimelightSubsystem();
 
 
   // The driver's controller
@@ -57,12 +59,12 @@ public class RobotContainer {
     // Drive at half speed when the right bumper is held
 
     new JoystickButton(m_driverController, Button.kA.value)
-      .whileTrue(new RepeatCommand(new UpdateBestLimelightCommand(m_robotDrive)))
-      .onFalse(new InstantCommand(() -> m_robotDrive.turnLightOnOrOff(false)));
+      .whileTrue(new RepeatCommand(new UpdateBestLimelightCommand(m_limelight)))
+      .onFalse(new InstantCommand(() -> m_limelight.turnLightOnOrOff(false)));
 
     new JoystickButton(m_driverController, Button.kY.value)
-      .whileTrue(new RepeatCommand(new TurnToLimelightProfiled(m_robotDrive)))
-      .onFalse(new InstantCommand(() -> m_robotDrive.turnLightOnOrOff(false)));
+      .whileTrue(new RepeatCommand(new TurnToLimelightProfiled(m_limelight, m_robotDrive)))
+      .onFalse(new InstantCommand(() -> m_limelight.turnLightOnOrOff(false)));
 
   }
 

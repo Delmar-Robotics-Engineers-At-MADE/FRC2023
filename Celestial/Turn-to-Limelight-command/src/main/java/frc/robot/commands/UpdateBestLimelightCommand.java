@@ -5,20 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /** A command that will turn the robot to the specified angle. */
 public class UpdateBestLimelightCommand extends CommandBase {
 
-  private DriveSubsystem m_drive;
+  private LimelightSubsystem m_limelight;
 
-  public UpdateBestLimelightCommand(DriveSubsystem drive) {
-    m_drive = drive;
+  public UpdateBestLimelightCommand(LimelightSubsystem limelight) {
+    m_limelight = limelight;
   }
 
   @Override
   public void execute() {
-    m_drive.updateBestLimelight();
+    m_limelight.updateBestLimelight();
   }
 
   // @Override

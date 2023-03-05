@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,11 +30,11 @@ public class TurnToLimelightProfiled extends ProfiledPIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-  public TurnToLimelightProfiled(DriveSubsystem drive) {
+  public TurnToLimelightProfiled(LimelightSubsystem limelight, DriveSubsystem drive) {
     super(
         m_PID,
         // Close loop on heading
-        drive::getBestLimelightYaw,
+        limelight::getBestLimelightYaw,
         // Set reference to target
         0.0,
         // Pipe output to turn robot

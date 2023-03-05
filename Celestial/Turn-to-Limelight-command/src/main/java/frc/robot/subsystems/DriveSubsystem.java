@@ -54,12 +54,6 @@ public class DriveSubsystem extends SubsystemBase {
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-  private double m_bestLimelightYaw = 0.0;
-  private double  m_bestLimelightDistance = 0.0;
-
-  private static NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  private boolean m_limelightOn;
-  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -84,18 +78,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Add the tank drive and encoders to dashboard
     ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
     driveBaseTab.add("Diff Drive", m_drive);
-    // Add the gyro
-    // Put both encoders in a list layout
-    // ShuffleboardLayout encoders =
-    //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
-    // encoders.add("Left Encoder", m_leftEncoder);
-    // encoders.add("Right Encoder", m_rightEncoder);
-    driveBaseTab.addDouble("Limelight Yaw", () -> m_bestLimelightYaw);
-    driveBaseTab.addDouble("Limelight Distance", () -> m_bestLimelightDistance);
-    driveBaseTab.addBoolean("Limelight On", () -> m_limelightOn);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
-
-    // setup photon vision
     
   }
 
@@ -106,45 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
   }
-
-      // call this from PID command to turn robot to best target
-    public double getBestLimelightYaw() {
-      updateBestLimelight();
-      return m_bestLimelightYaw;
-    }
-  
-    public double getBestLimelightDistance() {
-      updateBestLimelight();
-      return m_bestLimelightDistance;
-    }
-
-    public void updateBestLimelight() {
-      turnLightOnOrOff(true);
-      NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-      double targetsSeen = m_limelightTable.getEntry("tv").getDouble(0.0);
-      if (targetsSeen > 0) {
-        m_bestLimelightYaw = m_limelightTable.getEntry("tx").getDouble(0.0);
-        m_bestLimelightDistance = 0.0; // try calculating this using AprilTag util
-      } else {
-        m_bestLimelightYaw = 0.0;
-        m_bestLimelightDistance = 0.0;
-      }
-    }
-
-    public void turnLightOnOrOff (boolean turnOn) {
-      boolean turnOff = !turnOn;
-      boolean lightIsOff = !m_limelightOn;
-      if (m_limelightOn && turnOff) {
-        System.out.println("sending command to turn OFF light");
-        m_limelightTable.getEntry("ledMode").setNumber(1.0); // LED off
-        m_limelightOn = false;
-      } else if (lightIsOff && turnOn) {
-        System.out.println("sending command to turn ON light");
-        m_limelightTable.getEntry("ledMode").setNumber(3.0); // LED on bright
-        m_limelightOn = true;
-      }
-    }
-    
+   
 }
 
 
