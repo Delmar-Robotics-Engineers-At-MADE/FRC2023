@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 /** A command that will turn the robot to the specified angle. */
-public class UpdateBestAprilTag extends CommandBase {
+public class UpdateBestLimelightCommand extends CommandBase {
 
   private DriveSubsystem m_drive;
 
-  public UpdateBestAprilTag(DriveSubsystem drive) {
+  public UpdateBestLimelightCommand(DriveSubsystem drive) {
     m_drive = drive;
   }
 
   @Override
   public void execute() {
-    m_drive.updateBestAprilTag();
+    m_drive.updateBestLimelight();
   }
 
   // @Override

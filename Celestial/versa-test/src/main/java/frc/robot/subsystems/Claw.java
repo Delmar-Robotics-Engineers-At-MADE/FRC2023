@@ -49,22 +49,22 @@ public class Claw extends SubsystemBase {
     }
 
     public CommandBase in() {
-       return this.run(()-> runClawClosedLoop(10000));
-    }
-    public CommandBase coneOut() {
-        return this.run(()-> m_clawMotor.set(ControlMode.Velocity, CLAW_CONSTANTS.kConeOutVelocity));
-    }
-    public CommandBase cubeOut() {
-        return this.run(()-> m_clawMotor.set(ControlMode.Velocity, CLAW_CONSTANTS.kCubeOutVelocity));
-    }
-    public CommandBase shoot() {
-        return this.run(()-> m_clawMotor.set(ControlMode.Velocity, CLAW_CONSTANTS.kShootVelocity));
-    }
-    public CommandBase stop() {
-        return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kStopVelocity));
-    }
-    public CommandBase hold() {
-        return this.run(()-> m_clawMotor.set(ControlMode.Velocity, CLAW_CONSTANTS.kHoldVelocity));
-    }
-
+        return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kInVelocity)); // testing on celestial was with 10000 to 30000
+     }
+     public CommandBase coneOut() {
+         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kConeOutVelocity));
+     }
+     public CommandBase cubeOut() {
+         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kCubeOutVelocity));
+     }
+     public CommandBase shoot() {
+         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kShootVelocity));
+     }
+     public CommandBase stop() {
+         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kStopVelocity));
+     }
+     public CommandBase hold() {
+         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kHoldVelocity));
+     }
+ 
 }

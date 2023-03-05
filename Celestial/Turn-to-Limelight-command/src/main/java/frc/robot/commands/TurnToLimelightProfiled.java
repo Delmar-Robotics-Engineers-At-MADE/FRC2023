@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants.DriveConstants;
@@ -15,7 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
 /** A command that will turn the robot to the specified angle using a motion profile. */
-public class TurnToAprilTagProfiled extends ProfiledPIDCommand {
+public class TurnToLimelightProfiled extends ProfiledPIDCommand {
   
   private static ProfiledPIDController m_PID = new ProfiledPIDController(
     DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD,
@@ -30,13 +29,13 @@ public class TurnToAprilTagProfiled extends ProfiledPIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-  public TurnToAprilTagProfiled(double targetAngleDegrees, DriveSubsystem drive) {
+  public TurnToLimelightProfiled(DriveSubsystem drive) {
     super(
         m_PID,
         // Close loop on heading
-        drive::getBestAprilTagYaw,
+        drive::getBestLimelightYaw,
         // Set reference to target
-        targetAngleDegrees,
+        0.0,
         // Pipe output to turn robot
         (output, setpoint) -> drive.arcadeDrive(0, output),
         // Require the drive
@@ -52,9 +51,10 @@ public class TurnToAprilTagProfiled extends ProfiledPIDCommand {
         // Add the PID to dashboard
       if (!m_shuffleboardLoaded) {
         ShuffleboardTab turnTab = Shuffleboard.getTab("Drivebase");
-        turnTab.add("AprilTag PID2", m_PID);
+        turnTab.add("Limelight PID", m_PID);
         m_shuffleboardLoaded = true;  // so we do this only once no matter how many instances are created
       }
+      System.out.println("new turn to limelight command created");
   
   }
 

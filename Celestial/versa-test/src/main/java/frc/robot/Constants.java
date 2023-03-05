@@ -126,7 +126,7 @@ public final class Constants {
     public static int kTimeoutMs;
     public static int kPIDLoopIdx;
     //                                                    kP     kI    kD  kF             Iz     PeakOut 
-    public final static Gains kGains_Velocit = new Gains( 0.25, 0.0, 0.0, 0.08,  300,  1.00);
+    public final static Gains kGains_Velocit = new Gains( 0.05, 0.0, 0.0, 0.24,  300,  1.00);
   }
 
 }

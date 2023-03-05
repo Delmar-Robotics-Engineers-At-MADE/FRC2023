@@ -54,31 +54,11 @@ public class DriveSubsystem extends SubsystemBase {
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-  // // The left-side drive encoder
-  // private final Encoder m_leftEncoder =
-  //     new Encoder(
-  //         DriveConstants.kLeftEncoderPorts[0],
-  //         DriveConstants.kLeftEncoderPorts[1],
-  //         DriveConstants.kLeftEncoderReversed);
+  private double m_bestLimelightYaw = 0.0;
+  private double  m_bestLimelightDistance = 0.0;
 
-  // // The right-side drive encoder
-  // private final Encoder m_rightEncoder =
-  //     new Encoder(
-  //         DriveConstants.kRightEncoderPorts[0],
-  //         DriveConstants.kRightEncoderPorts[1],
-  //         DriveConstants.kRightEncoderReversed);
-
-  // The gyro sensor
-  //private final Gyro m_gyro = new ADXRS450_Gyro();
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
-
-private PhotonCamera m_photonCamera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
-private PhotonPipelineResult m_latestPhotonResult;
-private double m_bestAprilTagYaw = 0.0;
-private int m_bestAprilTagID = 0;
-private double m_bestAprilTagPitch=0.0;
-private double  m_bestAprilTagDistance = 0.0;
-
+  private static NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  private boolean m_limelightOn;
   
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -105,143 +85,66 @@ private double  m_bestAprilTagDistance = 0.0;
     ShuffleboardTab driveBaseTab = Shuffleboard.getTab("Drivebase");
     driveBaseTab.add("Diff Drive", m_drive);
     // Add the gyro
-    driveBaseTab.add("Gyro", m_gyro);
     // Put both encoders in a list layout
     // ShuffleboardLayout encoders =
     //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     // encoders.add("Left Encoder", m_leftEncoder);
     // encoders.add("Right Encoder", m_rightEncoder);
-    driveBaseTab.addDouble("Tag Yaw", () -> m_bestAprilTagYaw);
-    driveBaseTab.addDouble("Tag ID", () -> m_bestAprilTagID);
-    driveBaseTab.addDouble("Tag Distance", () -> m_bestAprilTagDistance);
+    driveBaseTab.addDouble("Limelight Yaw", () -> m_bestLimelightYaw);
+    driveBaseTab.addDouble("Limelight Distance", () -> m_bestLimelightDistance);
+    driveBaseTab.addBoolean("Limelight On", () -> m_limelightOn);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
 
     // setup photon vision
     
   }
 
-  /**
-   * Drives the robot using arcade controls.
-   *
-   * @param fwd the commanded forward movement
-   * @param rot the commanded rotation
-   */
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
   }
 
-  /** Resets the drive encoders to currently read a position of 0. */
-  // public void resetEncoders() {
-  //   m_leftEncoder.reset();
-  //   m_rightEncoder.reset();
-  // }
-
-  /**
-   * Gets the average distance of the two encoders.
-   *
-   * @return the average of the two encoder readings
-   */
-  // public double getAverageEncoderDistance() {
-  //   return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
-  // }
-
-  /**
-   * Gets the left drive encoder.
-   *
-   * @return the left drive encoder
-   */
-  // public Encoder getLeftEncoder() {
-  //   return m_leftEncoder;
-  // }
-
-  /**
-   * Gets the right drive encoder.
-   *
-   * @return the right drive encoder
-   */
-  // public Encoder getRightEncoder() {
-  //   return m_rightEncoder;
-  // }
-
-  /**
-   * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
-   *
-   * @param maxOutput the maximum output to which the drive will be constrained
-   */
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
   }
 
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from 180 to 180
-   */
-  public double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  }
-
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  public double getTurnRate() {
-    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  }
-
-    // call this from PID command to turn robot to best target
-    public double getBestAprilTagYaw() {
-      updateBestAprilTag();
-      return m_bestAprilTagYaw;
+      // call this from PID command to turn robot to best target
+    public double getBestLimelightYaw() {
+      updateBestLimelight();
+      return m_bestLimelightYaw;
     }
   
-    public double getBestAprilTagPitch() {
-      updateBestAprilTag();
-      return m_bestAprilTagPitch;
+    public double getBestLimelightDistance() {
+      updateBestLimelight();
+      return m_bestLimelightDistance;
     }
 
-    public double getBestAprilTagDistance() {
-      updateBestAprilTag();
-      return m_bestAprilTagDistance;
-    }
-
-    public void updateBestAprilTag() {
-      m_latestPhotonResult = m_photonCamera.getLatestResult();
-      if (m_latestPhotonResult.hasTargets()) {
-        m_bestAprilTagYaw = m_latestPhotonResult.getBestTarget().getYaw();
-        m_bestAprilTagPitch = m_latestPhotonResult.getBestTarget().getPitch();
-        m_bestAprilTagID = m_latestPhotonResult.getBestTarget().getFiducialId();
-        m_bestAprilTagDistance = PhotonUtils.calculateDistanceToTargetMeters(
-            DriveConstants.CAMERA_HEIGHT_METERS,
-            DriveConstants.TARGET_HEIGHT_METERS,
-            DriveConstants.CAMERA_PITCH_RADIANS,
-            Units.degreesToRadians(m_latestPhotonResult.getBestTarget().getPitch()));
-      } else {
-        m_bestAprilTagYaw = 0.0;
-        m_bestAprilTagPitch = 0.0;
-        m_bestAprilTagID = 0;
-        m_bestAprilTagDistance =0;
-      }
-      
-    }
-
-    public void updateLimeLightTarget() {
+    public void updateBestLimelight() {
+      turnLightOnOrOff(true);
       NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-      NetworkTableEntry ty = table.getEntry("ty");
-      if (ty.getDouble(0.0) == 1){
-        //do something
+      double targetsSeen = m_limelightTable.getEntry("tv").getDouble(0.0);
+      if (targetsSeen > 0) {
+        m_bestLimelightYaw = m_limelightTable.getEntry("tx").getDouble(0.0);
+        m_bestLimelightDistance = 0.0; // try calculating this using AprilTag util
+      } else {
+        m_bestLimelightYaw = 0.0;
+        m_bestLimelightDistance = 0.0;
       }
-      else {
-        //do nothing
-      }
-
     }
+
+    public void turnLightOnOrOff (boolean turnOn) {
+      boolean turnOff = !turnOn;
+      boolean lightIsOff = !m_limelightOn;
+      if (m_limelightOn && turnOff) {
+        System.out.println("sending command to turn OFF light");
+        m_limelightTable.getEntry("ledMode").setNumber(1.0); // LED off
+        m_limelightOn = false;
+      } else if (lightIsOff && turnOn) {
+        System.out.println("sending command to turn ON light");
+        m_limelightTable.getEntry("ledMode").setNumber(3.0); // LED on bright
+        m_limelightOn = true;
+      }
+    }
+    
 }
 
 

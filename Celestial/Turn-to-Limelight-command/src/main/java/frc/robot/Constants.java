@@ -41,9 +41,9 @@ public final class Constants {
     public static final double kStabilizationI = 0.8;
     public static final double kStabilizationD = 0;
 
-    public static final double kTurnP = 0.06;
+    public static final double kTurnP = 0.3;
     public static final double kTurnI = 0;
-    public static final double kTurnD = 0;
+    public static final double kTurnD = 0.01;
 
     public static final double kMaxTurnRateDegPerS = 25;
     public static final double kMaxTurnAccelerationDegPerSSquared = 300;
