@@ -22,7 +22,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private double lowY = 0.0;
 
   private static NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  private boolean m_limelightOn;
+  private boolean m_limelightOn = false;
   
   /** Creates a new DriveSubsystem. */
   public LimelightSubsystem() {
@@ -47,7 +47,7 @@ public class LimelightSubsystem extends SubsystemBase {
   // }
 
   public double getLimelightBestWidth(){
-    updateBestLimelight();
+    // assume command to do this is called in combination, was: updateBestLimelight();
     return m_bestWidth;
   }
 

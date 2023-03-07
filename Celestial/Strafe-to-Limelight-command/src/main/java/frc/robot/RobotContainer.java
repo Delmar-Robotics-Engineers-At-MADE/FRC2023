@@ -63,7 +63,8 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> m_limelight.turnLightOnOrOff(false)));
 
     new JoystickButton(m_driverController, Button.kY.value)
-      .whileTrue(new RepeatCommand(new StrafeToLimelight(m_limelight, m_robotDrive)))
+      .whileTrue(new RepeatCommand(new UpdateBestLimelightCommand(m_limelight)))
+      .onTrue(new RepeatCommand(new StrafeToLimelight(m_limelight, m_robotDrive)))
       .onFalse(new InstantCommand(() -> m_limelight.turnLightOnOrOff(false)));
 
   }
