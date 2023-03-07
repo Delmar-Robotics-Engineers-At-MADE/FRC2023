@@ -41,9 +41,9 @@ public final class Constants {
     public static final double kStabilizationI = 0.8;
     public static final double kStabilizationD = 0;
 
-    public static final double kTurnP = 0.06;
+    public static final double kTurnP = 0.9;
     public static final double kTurnI = 0;
-    public static final double kTurnD = 0;
+    public static final double kTurnD = 0.01;
 
     public static final double kMaxTurnRateDegPerS = 25;
     public static final double kMaxTurnAccelerationDegPerSSquared = 300;
@@ -53,18 +53,18 @@ public final class Constants {
 
     // Constants such as camera and target height stored. Change per robot and goal!
     public final static double CAMERA_HEIGHT_METERS = Units.inchesToMeters(36.5);
-    public final static double TARGET_HEIGHT_METERS = Units.feetToMeters(3);
+    public final static double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
     
     // Angle between horizontal and the camera.
     public final static double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
 
     // How far from the target we want to be
-    public final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    public final static double GOAL_RANGE_METERS = Units.feetToMeters(1);
     
-    public static final double kDriveP = 0.1;
+    public static final double kDriveP = 0.2;
     public static final double kDriveI = 0;
     public static final double kDriveD = 0;
-    public static final double kDriveToleranceDist = 1;
+    public static final double kDriveToleranceDist = 0;
     //public static final double kDriveRateTolerance = 10; // degrees per second
 
   }
@@ -81,36 +81,5 @@ public final class Constants {
     public static final double kHoodD = 0;
     public static final double kDistanceTolerance = 1;
    ;
-  }
-
-  public static final class UpperArmConstants {
-
-    public static final int UPPER_ARM_MOTOR_ID = 0;
-
-    public static final int kRevEncoderLimitLow = -20;
-    public static final int kRevEncoderLimitHigh = -200;
-    public static final double kRevEncoderP = 0.009;  // was 0.003 b4 added versa stage
-    public static final double kRevEncoderI = 0;
-    public static final double kRevEncoderD = 0.006;  // was 0.002 b4 added versa stage
-    public static final double kRevEncoderTolerance = 20; 
-    public static final double kRevEncoderMaxCountsPerS = 750;
-    public static final double kRevEncoderMaxCountsPerSSquared = 1000;
-    public static final double kRevEncoderMaxCountsPerSTolerance = 100;
-
-    public static final double kPotmeterP = 60; // was 20 b4 added versa stage
-    public static final double kPotmeterI = 6;  // was 2 b4 added versa stage
-    public static final double kPotmeterD = 0;
-    public static final double kPotmeterTolerance = 0.001;  
-
-    public static final double kHomePotmeterValue = 0.575;
-    public static final double kHomeEncoderValue = 0.0;
-
-    public static final double kMaxFalconPower = 0.60;  // was 0.20 b4 added versa stage
-
-    // for testing only
-    public static final double kFalconClosedLoopTolerance = 100;
-    public static final double kFalconTestNudgeAmount = 6000;  // was 2000 b4 added versa stage
-    public static final double kFalconP = 0.1;  
-
   }
 }
