@@ -56,7 +56,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // Drive at half speed when the right bumper is held
 
     new JoystickButton(m_driverController, Button.kA.value)
       .whileTrue(new RepeatCommand(new UpdateBestLimelightCommand(m_limelight)))
