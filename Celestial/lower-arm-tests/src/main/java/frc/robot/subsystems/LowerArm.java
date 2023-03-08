@@ -30,7 +30,7 @@ public class LowerArm extends SubsystemBase {
         m_elbow = new CANSparkMax(LowerArmConstants.LOWER_ARM_MOTOR_ID, MotorType.kBrushless);
         m_elbowEncoder = m_elbow.getAbsoluteEncoder(Type.kDutyCycle);
         m_elbow.restoreFactoryDefaults();
-        m_elbow.setSmartCurrentLimit(20);
+        m_elbow.setSmartCurrentLimit(60);
         m_elbow.setIdleMode(IdleMode.kBrake);
         m_elbowEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
         m_elbowPIDController = m_elbow.getPIDController();
@@ -104,6 +104,10 @@ public class LowerArm extends SubsystemBase {
 
     public CommandBase runLowerArmDown() {
         return this.run(() -> m_elbow.set(-1 * LowerArmConstants.kManualSpeed));
+    }
+
+    public CommandBase stop() {
+        return this.run(() -> m_elbow.set(0.0));
     }
 
     public double getElbowPos() {

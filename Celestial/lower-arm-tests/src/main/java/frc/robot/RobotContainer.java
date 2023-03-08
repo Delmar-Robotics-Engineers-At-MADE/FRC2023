@@ -17,13 +17,19 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
     // m_claw.setDefaultCommand(new RunCommand(() -> m_claw.stop(), m_claw));
-    CommandScheduler.getInstance().setDefaultCommand(m_lowerArm, m_lowerArm.lowerArmHoldPosition());
+    // CommandScheduler.getInstance().setDefaultCommand(m_lowerArm, m_lowerArm.lowerArmHoldPosition());
+    CommandScheduler.getInstance().setDefaultCommand(m_lowerArm, new RunCommand(() -> m_lowerArm.stop(), m_lowerArm));
   }
 
   private void configureButtonBindings() {
 
+    new JoystickButton(m_driverController, Button.kY.value)
+    .whileTrue(m_lowerArm.runLowerArmUp())
+    .onFalse(m_lowerArm.stop());
+
     new JoystickButton(m_driverController, Button.kA.value)
-    .whileTrue(m_lowerArm.runLowerArmUp());
+    .whileTrue(m_lowerArm.runLowerArmDown())
+    .onFalse(m_lowerArm.stop());
 
 
 
