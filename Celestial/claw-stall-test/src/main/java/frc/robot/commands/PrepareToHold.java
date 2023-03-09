@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WrapperCommand;
-import frc.robot.Constants.CLAW_CONSTANTS;
 import frc.robot.subsystems.Claw;
 
 /** A command that will turn the robot to the specified angle. */
@@ -28,12 +26,6 @@ public class PrepareToHold extends CommandBase {
   @Override
   public boolean isFinished() {
       return true;  
-  }
-
-  @Override
-  public WrapperCommand handleInterrupt(Runnable handler) {
-    System.out.println("Hold claw being interrupted");
-    return super.handleInterrupt(handler);
   }
 
 }

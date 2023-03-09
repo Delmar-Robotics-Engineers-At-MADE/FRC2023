@@ -9,7 +9,6 @@ import frc.robot.commands.MoveClawUntilStall;
 import frc.robot.commands.PrepareToHold;
 import frc.robot.subsystems.Claw;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -27,7 +26,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
-    // m_claw.setDefaultCommand(new RunCommand(() -> m_claw.stop(), m_claw));
     CommandScheduler.getInstance().setDefaultCommand(m_claw, m_claw.stop());
   }
 
@@ -35,8 +33,6 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kA.value)
         .toggleOnTrue(m_moveAndHoldCommand);
-    // .onTrue(new MoveClawUntilStall(CLAW_CONSTANTS.kInVelocity, m_claw))
-    // .onFalse(new HoldClawGrip(m_claw));
 
 
 

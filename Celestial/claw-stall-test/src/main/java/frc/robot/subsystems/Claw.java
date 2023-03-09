@@ -17,7 +17,6 @@ public class Claw extends SubsystemBase {
     private TalonSRX m_clawMotor;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;  
     private boolean m_holding = false;
-    public boolean m_cancelHold = false;
  
 
     
@@ -57,7 +56,6 @@ public class Claw extends SubsystemBase {
     public void runClawClosedLoop (double velocity) {
         m_holding = false;
         m_clawMotor.set(ControlMode.Velocity, velocity);
-        // System.out.println("Claw motor velocity: " + velocity);
     }
 
     private double getClawStatorCurrent () {
@@ -70,25 +68,14 @@ public class Claw extends SubsystemBase {
 
     public boolean checkStalledCondition() {
         return (getClawSupplyCurrent() > CLAW_CONSTANTS.kStallCurrent);
-        // return false;
     }
 
     public void prepareToHold() {
         m_clawMotor.setSelectedSensorPosition(0.0);
         m_holding = false;
-        m_cancelHold = false;
     }
-
-    public void cancelHold() {
-        m_cancelHold = true;
-    }
-
-    // public void setHoldingFlag (boolean holding) {
-    //     m_holding = holding;
-    // }
 
     public void hold(double position) {
-        // double position = m_clawMotor.getSelectedSensorPosition();
         m_clawMotor.set(ControlMode.Position, position);
         m_holding = true;
     }
