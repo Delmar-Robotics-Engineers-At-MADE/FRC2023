@@ -116,12 +116,13 @@ public final class Constants {
 
   public static final class CLAW_CONSTANTS {
     public static final int CLAW_ID = 4;
-    public static final long kInVelocity = 10000;
+    public static final long kInVelocity = 500;
     public static final long kConeOutVelocity = 2048;
     public static final long kCubeOutVelocity = 1228;
     public static final long kShootVelocity = 4096;
     public static final long kStopVelocity = 0;
     public static final long kHoldVelocity = 300;
+    public static final double kStallCurrent = 1.0;
 
     public static int kTimeoutMs;
     public static int kPIDLoopIdx;

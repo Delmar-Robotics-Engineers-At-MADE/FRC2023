@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -15,6 +16,8 @@ import frc.robot.Constants.CLAW_CONSTANTS;
 public class Claw extends SubsystemBase {
     private TalonSRX m_clawMotor;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;  
+    private boolean m_holding = false;
+    public boolean m_cancelHold = false;
  
 
     
@@ -23,6 +26,9 @@ public class Claw extends SubsystemBase {
         m_clawMotor.configFactoryDefault();
         m_clawMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CLAW_CONSTANTS.kPIDLoopIdx, CLAW_CONSTANTS.kTimeoutMs);
         m_clawMotor.setSensorPhase(true);
+
+        // neutral mode
+        m_clawMotor.setNeutralMode(NeutralMode.Brake);
 
         /* Config the peak and nominal outputs */
         m_clawMotor.configNominalOutputForward(0, CLAW_CONSTANTS.kTimeoutMs);
@@ -40,12 +46,51 @@ public class Claw extends SubsystemBase {
 
         ShuffleboardTab shuffTab = Shuffleboard.getTab("Claw");
         shuffTab.addDouble("Motor V", () -> m_clawMotor.getSelectedSensorVelocity());
+        shuffTab.addDouble("Motor Pos", () -> m_clawMotor.getSelectedSensorPosition());
+        shuffTab.addDouble("Motor Stator I", () -> getClawStatorCurrent());
+        shuffTab.addDouble("Motor Supply I", () -> getClawSupplyCurrent());
+        shuffTab.addBoolean("Stalled", () -> checkStalledCondition());
+        shuffTab.addBoolean("Holding", () -> m_holding);
 
     }
 
-    private void runClawClosedLoop (double velocity) {
+    public void runClawClosedLoop (double velocity) {
+        m_holding = false;
         m_clawMotor.set(ControlMode.Velocity, velocity);
         // System.out.println("Claw motor velocity: " + velocity);
+    }
+
+    private double getClawStatorCurrent () {
+        return m_clawMotor.getStatorCurrent();
+    }
+
+    private double getClawSupplyCurrent () {
+        return m_clawMotor.getSupplyCurrent();
+    }
+
+    public boolean checkStalledCondition() {
+        return (getClawSupplyCurrent() > CLAW_CONSTANTS.kStallCurrent);
+        // return false;
+    }
+
+    public void prepareToHold() {
+        m_clawMotor.setSelectedSensorPosition(0.0);
+        m_holding = false;
+        m_cancelHold = false;
+    }
+
+    public void cancelHold() {
+        m_cancelHold = true;
+    }
+
+    // public void setHoldingFlag (boolean holding) {
+    //     m_holding = holding;
+    // }
+
+    public void hold(double position) {
+        // double position = m_clawMotor.getSelectedSensorPosition();
+        m_clawMotor.set(ControlMode.Position, position);
+        m_holding = true;
     }
 
     public CommandBase in() {
@@ -63,8 +108,10 @@ public class Claw extends SubsystemBase {
      public CommandBase stop() {
          return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kStopVelocity));
      }
-     public CommandBase hold() {
-         return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kHoldVelocity));
-     }
+    //  public CommandBase hold() {
+    //      return this.run(()-> runClawClosedLoop(CLAW_CONSTANTS.kHoldVelocity));
+    //  }
+
+
  
 }
