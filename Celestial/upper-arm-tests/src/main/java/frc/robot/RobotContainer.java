@@ -32,8 +32,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
     .toggleOnTrue(new HomeUpperArmCommand(m_upperArm));
     
-    new JoystickButton(m_driverController, Button.kX.value)
-    .toggleOnTrue(new MoveUpperArmCommand(200, m_upperArm));
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    .toggleOnTrue(new MoveUpperArmCommand(280, m_upperArm));
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    .toggleOnTrue(new MoveUpperArmCommand(50, m_upperArm));
 
     
   }

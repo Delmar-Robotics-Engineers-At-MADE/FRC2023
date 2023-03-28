@@ -89,7 +89,7 @@ public final class Constants {
 
     public static final int kRevEncoderLimitLow = -20;
     public static final int kRevEncoderLimitHigh = -200;
-    public static final double kRevEncoderP = 0.009;  // was 0.003 b4 added versa stage
+    public static final double kRevEncoderP = 0.006;  // was 0.003 b4 added versa stage
     public static final double kRevEncoderI = 0;
     public static final double kRevEncoderD = 0.006;  // was 0.002 b4 added versa stage
     public static final double kRevEncoderTolerance = 20; 
@@ -102,7 +102,7 @@ public final class Constants {
     public static final double kPotmeterD = 0;
     public static final double kPotmeterTolerance = 0.001;  
 
-    public static final double kHomePotmeterValue = 0.570;
+    public static final double kHomePotmeterValue = 0.484;
     public static final double kHomeEncoderValue = 0.0;
 
     public static final double kMaxFalconPower = 0.60;  // was 0.20 b4 added versa stage
