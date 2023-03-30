@@ -103,6 +103,9 @@ private double  m_bestAprilTagDistance = 0.0;
     driveBaseTab.add("Diff Drive", m_drive);
     // Add the gyro
     driveBaseTab.add("Gyro", m_gyro);
+    driveBaseTab.addDouble("Gyro Disp X", () -> m_gyro.getDisplacementX());
+    driveBaseTab.addDouble("Gyro Disp Y", () -> m_gyro.getDisplacementY());
+    driveBaseTab.addDouble("Gyro Disp Z", () -> m_gyro.getDisplacementZ());
     // Put both encoders in a list layout
     // ShuffleboardLayout encoders =
     //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
@@ -172,6 +175,7 @@ private double  m_bestAprilTagDistance = 0.0;
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+    m_gyro.resetDisplacement();
   }
 
   /**
@@ -181,6 +185,10 @@ private double  m_bestAprilTagDistance = 0.0;
    */
   public double getHeading() {
     return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public double getDisplacementX() {
+    return m_gyro.getDisplacementX();
   }
 
   /**
