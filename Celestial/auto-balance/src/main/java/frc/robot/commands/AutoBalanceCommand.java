@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /** A command that will turn the robot to the specified angle using a motion profile. */
-public class AutoBalance extends ProfiledDoublePIDCommand {
+public class AutoBalanceCommand extends ProfiledDoublePIDCommand {
   
   // turn PID
   private static ProfiledPIDController m_PID1 = new ProfiledPIDController(
@@ -38,13 +38,13 @@ public class AutoBalance extends ProfiledDoublePIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-  public AutoBalance(DriveSubsystem drive) {
+  public AutoBalanceCommand(DriveSubsystem drive) {
     super(
         m_PID1, m_PID2,
         // rotate and balance
-        drive::getHeading, drive::getRoll,
+        drive::getHeading, drive::getBalance,
         // Set reference to target
-        0, 180,
+        0, 0,
         // Pipe output to turn robot
         (output, setpoint) -> drive.arcadeDrive(-output.x2, output.x1),
         // Require the drive
@@ -55,7 +55,7 @@ public class AutoBalance extends ProfiledDoublePIDCommand {
 
     // Set the controller to be continuous (because it is an angle controller)
     getController1().enableContinuousInput(-180, 180);
-    getController2().enableContinuousInput(90, 270);
+    getController2().enableContinuousInput(-180, 180);
 
     getController1().setTolerance(DriveConstants.kYawToleranceDeg, DriveConstants.kYawRateToleranceDegPerS);
     getController2().setTolerance(DriveConstants.kBalanceToleranceDeg, DriveConstants.kBalanceRateToleranceDegPerS);
@@ -73,8 +73,11 @@ public class AutoBalance extends ProfiledDoublePIDCommand {
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
-    if (getController2().atGoal()) {System.out.println("done strafing to April Tag");}
-    return getController1().atGoal() && getController2().atGoal();
+    boolean done = getController1().atGoal() && getController2().atGoal();
+    if (done) {
+      System.out.println("done balancing");
+    }
+    return done;
   }
 
   @Override

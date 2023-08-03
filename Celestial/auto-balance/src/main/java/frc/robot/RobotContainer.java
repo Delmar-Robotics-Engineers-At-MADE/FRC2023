@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.PS4Controller;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.subsystems.DriveSubsystem;
@@ -73,22 +74,25 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kNormalSpeedFactor)));
 
     // Stabilize robot to drive straight with gyro when trigger is held
-    new JoystickButton(m_driverController, 1)
-        .whileTrue(
-            new PIDCommand(
-                new PIDController(
-                    DriveConstants.kStabilizationP,
-                    DriveConstants.kStabilizationI,
-                    DriveConstants.kStabilizationD),
-                // Close the loop on the turn rate or the heading
-                m_robotDrive::getHeading,
-                // Setpoint is 0
-                0,
-                // Pipe the output to the turning controls
-                output -> m_robotDrive.arcadeDrive(-m_driverController.getRawAxis(1), output),
-                // Require the robot drive
-                m_robotDrive));
+    // new JoystickButton(m_driverController, 1)
+    //     .whileTrue(
+    //         new PIDCommand(
+    //             new PIDController(
+    //                 DriveConstants.kStabilizationP,
+    //                 DriveConstants.kStabilizationI,
+    //                 DriveConstants.kStabilizationD),
+    //             // Close the loop on the turn rate or the heading
+    //             m_robotDrive::getHeading,
+    //             // Setpoint is 0
+    //             0,
+    //             // Pipe the output to the turning controls
+    //             output -> m_robotDrive.arcadeDrive(-m_driverController.getRawAxis(1), output),
+    //             // Require the robot drive
+    //             m_robotDrive));
 
+    // Auto-balance when trigger is held
+    new JoystickButton(m_driverController, 1)
+         .whileTrue(new AutoBalanceCommand(m_robotDrive));
 
   }
 

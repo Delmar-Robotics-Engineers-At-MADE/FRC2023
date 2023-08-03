@@ -76,7 +76,7 @@ public class ProfiledDoublePIDCommand extends CommandBase {
 
     protected final ProfiledPIDController m_controller;
     protected DoubleSupplier m_measurement;
-    protected Supplier<State> m_goal;
+    protected Supplier<State> m_goal1;
     protected final ProfiledPIDController m_controller2;
     protected DoubleSupplier m_measurement2;
     protected Supplier<State> m_goal2;
@@ -87,19 +87,19 @@ public class ProfiledDoublePIDCommand extends CommandBase {
     ProfiledPIDController controller2,
     DoubleSupplier measurementSource,
     DoubleSupplier measurementSource2,
-    DoubleSupplier goalSource,
+    DoubleSupplier goalSource1,
     DoubleSupplier goalSource2,
     BiConsumer<DoubleDouble, DoubleState> useOutput,
       Subsystem... requirements) {
     requireNonNullParam(controller, "controller", "SynchronousPIDCommand");
     requireNonNullParam(measurementSource, "measurementSource", "SynchronousPIDCommand");
-    requireNonNullParam(goalSource, "goalSource", "SynchronousPIDCommand");
+    requireNonNullParam(goalSource1, "goalSource", "SynchronousPIDCommand");
     requireNonNullParam(useOutput, "useOutput", "SynchronousPIDCommand");
 
     m_controller = controller;
     m_useOutput = useOutput;
     m_measurement = measurementSource;
-    m_goal = () -> new State(goalSource.getAsDouble(), 0);
+    m_goal1 = () -> new State(goalSource1.getAsDouble(), 0);
     m_controller2 = controller2;
     m_measurement2 = measurementSource2;
     m_goal2 = () -> new State(goalSource2.getAsDouble(), 0);
@@ -109,11 +109,11 @@ public class ProfiledDoublePIDCommand extends CommandBase {
   public ProfiledDoublePIDCommand(
     ProfiledPIDController controller, ProfiledPIDController controller2,
     DoubleSupplier measurementSource, DoubleSupplier measurementSource2,
-    double goal, double goal2,
+    double goal1, double goal2,
       BiConsumer<DoubleDouble, DoubleState> useOutput,
       Subsystem... requirements) {
         this(controller, controller2, measurementSource, measurementSource2, 
-             () -> goal, () -> goal2, useOutput, requirements);
+             () -> goal1, () -> goal2, useOutput, requirements);
   }
 
   @Override
@@ -125,7 +125,7 @@ public class ProfiledDoublePIDCommand extends CommandBase {
   @Override
   public void execute() {
     m_useOutput.accept(
-        new DoubleDouble (m_controller.calculate(m_measurement.getAsDouble(), m_goal.get()), 
+        new DoubleDouble (m_controller.calculate(m_measurement.getAsDouble(), m_goal1.get()), 
                           m_controller2.calculate(m_measurement2.getAsDouble(), m_goal2.get())),
         new DoubleState(m_controller.getSetpoint(), m_controller2.getSetpoint()));
   }

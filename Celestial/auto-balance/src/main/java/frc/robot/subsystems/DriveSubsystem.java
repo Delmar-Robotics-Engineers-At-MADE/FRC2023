@@ -66,11 +66,6 @@ public class DriveSubsystem extends SubsystemBase {
   //private final Gyro m_gyro = new ADXRS450_Gyro();
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
 
-private double m_bestAprilTagYaw = 0.0;
-private int m_bestAprilTagID = 0;
-private double m_bestAprilTagPitch=0.0;
-private double  m_bestAprilTagDistance = 0.0;
-
   
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -101,14 +96,12 @@ private double  m_bestAprilTagDistance = 0.0;
     driveBaseTab.addDouble("Gyro Disp X", () -> m_gyro.getDisplacementX());
     driveBaseTab.addDouble("Gyro Disp Y", () -> m_gyro.getDisplacementY());
     driveBaseTab.addDouble("Gyro Disp Z", () -> m_gyro.getDisplacementZ());
+    driveBaseTab.addDouble("Gyro Pitch", () -> m_gyro.getPitch());
     // Put both encoders in a list layout
     // ShuffleboardLayout encoders =
     //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     // encoders.add("Left Encoder", m_leftEncoder);
     // encoders.add("Right Encoder", m_rightEncoder);
-    driveBaseTab.addDouble("Tag Yaw", () -> m_bestAprilTagYaw);
-    driveBaseTab.addDouble("Tag ID", () -> m_bestAprilTagID);
-    driveBaseTab.addDouble("Tag Distance", () -> m_bestAprilTagDistance);
     setMaxOutput(DriveConstants.kNormalSpeedFactor);
 
     // setup photon vision
@@ -122,6 +115,7 @@ private double  m_bestAprilTagDistance = 0.0;
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
+    // System.out.println("fwd, rot: " + fwd + ", " + rot);
     m_drive.arcadeDrive(fwd, rot);
   }
 
@@ -177,8 +171,8 @@ private double  m_bestAprilTagDistance = 0.0;
     return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public double getRoll() {
-    return Math.IEEEremainder(m_gyro.getRoll(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  public double getBalance() {
+    return Math.IEEEremainder(m_gyro.getPitch(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public double getDisplacementX() {

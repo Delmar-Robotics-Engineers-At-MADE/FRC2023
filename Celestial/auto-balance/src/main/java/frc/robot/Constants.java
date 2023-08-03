@@ -32,12 +32,12 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double kStabilizationP = 0.8;
-    public static final double kStabilizationI = 0.8;
+    public static final double kStabilizationP = 0.04;
+    public static final double kStabilizationI = 0;
     public static final double kStabilizationD = 0;
 
-    public static final double kBalanceP = 0.8;
-    public static final double kBalanceI = 0.8;
+    public static final double kBalanceP = 0.08;
+    public static final double kBalanceI = 0;
     public static final double kBalanceD = 0;
     public static final double kMaxBalanceRateDegPerS = 8;
     public static final double kMaxBalanceAccelerationDegPerSSquared = 20;
