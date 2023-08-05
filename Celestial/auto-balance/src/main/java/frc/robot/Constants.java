@@ -32,13 +32,13 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double kStabilizationP = 0.04;
+    public static final double kStabilizationP = 0.30;
     public static final double kStabilizationI = 0;
     public static final double kStabilizationD = 0;
 
-    public static final double kBalanceP = 0.08;
-    public static final double kBalanceI = 0;
-    public static final double kBalanceD = 0;
+    public static final double kBalanceP = 0.03;
+    public static final double kBalanceI = 0.01;
+    public static final double kBalanceD = 0.01;
     public static final double kMaxBalanceRateDegPerS = 8;
     public static final double kMaxBalanceAccelerationDegPerSSquared = 20;
     public static final double kBalanceToleranceDeg = 5;
@@ -48,8 +48,8 @@ public final class Constants {
     public static final double kTurnI = 0;
     public static final double kTurnD = 0;
 
-    public static final double kMaxYawRateDegPerS = 8;
-    public static final double kMaxYawAccelerationDegPerSSquared = 20;
+    public static final double kMaxYawRateDegPerS = 100;
+    public static final double kMaxYawAccelerationDegPerSSquared = 100;
     public static final double kYawToleranceDeg = 5;
     public static final double kYawRateToleranceDegPerS = 10;
 

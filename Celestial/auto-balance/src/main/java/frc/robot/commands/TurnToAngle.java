@@ -45,11 +45,11 @@ public class TurnToAngle extends PIDCommand {
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
 
     // Add the PID to dashboard
-    if (!m_shuffleboardLoaded) {
-      ShuffleboardTab turnTab = Shuffleboard.getTab("Drivebase");
-      turnTab.add("Gyro PID", m_PID);
-      m_shuffleboardLoaded = true;  // so we do this only once no matter how many instances are created
-    }
+    // if (!m_shuffleboardLoaded) {
+    //   ShuffleboardTab turnTab = Shuffleboard.getTab("Drivebase");
+    //   turnTab.add("Gyro PID", m_PID);
+    //   m_shuffleboardLoaded = true;  // so we do this only once no matter how many instances are created
+    // }
   }
 
   @Override

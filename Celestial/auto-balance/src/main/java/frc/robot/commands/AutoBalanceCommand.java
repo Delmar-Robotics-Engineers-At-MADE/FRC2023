@@ -46,7 +46,8 @@ public class AutoBalanceCommand extends ProfiledDoublePIDCommand {
         // Set reference to target
         0, 0,
         // Pipe output to turn robot
-        (output, setpoint) -> drive.arcadeDrive(-output.x2, output.x1),
+        (output, setpoint) -> drive.arcadeDrive(
+          Math.max(-1,Math.min(1,output.x2)), Math.max(-1,Math.min(0.85,output.x1))),
         // Require the drive
         drive);
 
@@ -59,7 +60,7 @@ public class AutoBalanceCommand extends ProfiledDoublePIDCommand {
 
     getController1().setTolerance(DriveConstants.kYawToleranceDeg, DriveConstants.kYawRateToleranceDegPerS);
     getController2().setTolerance(DriveConstants.kBalanceToleranceDeg, DriveConstants.kBalanceRateToleranceDegPerS);
-      
+
     // Add the PID to dashboard
     if (!m_shuffleboardLoaded) {
       ShuffleboardTab turnTab = Shuffleboard.getTab("Drivebase");

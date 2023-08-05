@@ -102,7 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
     //     driveBaseTab.getLayout("List Layout", "Encoders").withPosition(0, 0).withSize(2, 2);
     // encoders.add("Left Encoder", m_leftEncoder);
     // encoders.add("Right Encoder", m_rightEncoder);
-    setMaxOutput(DriveConstants.kNormalSpeedFactor);
+    setMaxOutput(0.5);
 
     // setup photon vision
     
@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-    // System.out.println("fwd, rot: " + fwd + ", " + rot);
+    System.out.println("fwd, rot: " + fwd + ", " + rot);
     m_drive.arcadeDrive(fwd, rot);
   }
 
@@ -163,6 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
+    System.out.println("Zeroing gyro");
     m_gyro.reset();
     m_gyro.resetDisplacement();
   }

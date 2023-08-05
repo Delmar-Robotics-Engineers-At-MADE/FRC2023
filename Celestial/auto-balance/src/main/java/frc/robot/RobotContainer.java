@@ -69,9 +69,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the flight controller thumb button is held
+    // new JoystickButton(m_driverController, 2)
+    //     .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kSlowSpeedFactor)))
+    //     .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kNormalSpeedFactor)));
+
+    // Reset gyro when thumb button is held
     new JoystickButton(m_driverController, 2)
-        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kSlowSpeedFactor)))
-        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(DriveConstants.kNormalSpeedFactor)));
+         .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
     // Stabilize robot to drive straight with gyro when trigger is held
     // new JoystickButton(m_driverController, 1)
